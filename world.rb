@@ -4,17 +4,20 @@ class World
   LIVE_TIME = 1000
 
   def initialize
-    @buildings = Array.new
+    @humans = Array.new
   end
 
-  def add_building(building)
-    @buildings << building
-
-    puts @buildings.length
+  def set_building(building)
+    @building = building
   end
 
   def start
-    LIVE_TIME.times do |index|
+    LIVE_TIME.times do |i|
+      create_new_humans
     end
   end
+
+  private
+    def create_new_humans
+    end
 end

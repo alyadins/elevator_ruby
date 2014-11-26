@@ -2,73 +2,53 @@ require 'colorize'
 require_relative 'building'
 require_relative 'world'
 
-debug = false;
+debug = true
 
-def get_floors
+def get_param(min, error_message)
   loop {
-    floors = gets.to_i
-    if floors < 2
-      puts "Количество этажей задано неверно".red
+    param = gets.to_i
+    if param < min
+      puts error_message
     else
-      return floors;
+      return param
     end
   }
 end
 
-
-def get_elevators_count
-  loop {
-    elevators = gets.to_i
-    if elevators < 1
-      puts "Нужно боооольше лифтов".red
-    else
-      return elevators
-    end
-  }
-end
-
-
-def get_waiting_time
-  loop {
-    time = gets.to_i
-    if time < 1
-      puts "Время должно быть временем!!!!!111".red
-    else
-      return time
-    end
-  }
-end
-
-unless debug
+if debug
+  floors = 16
+  elevators_count = 3
+  waiting_time = 2
+  capacity = 4
+else
   puts "Здравствуй человек. Я лифто-симулятор."
   puts "Мне нужна информация о здании и лифтах"
   puts "Сколько этажей в твоем здании?"
 
-  floors = get_floors
+  floors = get_param(2, "Количество этажей задано неверно".red)
   puts "Создано здание с #{floors} этажами"
 
   puts "Теперь разберемся с лифтами"
   puts "Сколько их в твоем здании?"
-  elevators_count = get_elevators_count
+  elevators_count = get_param(1, "Нужно боооольше лифтов".red)
   puts "В здание помещено #{elevators_count} лифтов"
 
   puts "Теперь параметры лифтов"
   puts "Сколько времени лифт стоит на этаже?"
-  waiting_time = get_waiting_time
+  waiting_time = get_param(1, "Время должно быть временем!!!!!111".red)
   if waiting_time > 1
     puts "Создан медленный лифт который стоит на этаже вечность(#{waiting_time} времени)"
   else
     puts "Быстрые лифты помещены в здание"
   end
-else
-  floors = 16
-  elevators_count = 3
-  waiting_time = 2
+
+  puts "Какова вместимость лифтов?"
+  capacity = get_param(2, "Минимальное число пассажиров равно 2".red)
 end
 
 world = World.new
-building = Building.new(floors, elevators_count, waiting_time)
-world.add_building building
+building = Building.new(floors, elevators_count, waiting_time, capacity)
+world.set_building building
 
 world.start
 
