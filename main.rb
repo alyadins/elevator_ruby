@@ -16,7 +16,7 @@ def get_param(min, error_message)
 end
 
 if debug
-  floors = 16
+  floors = 4
   elevators_count = 3
   waiting_time = 2
   capacity = 4
