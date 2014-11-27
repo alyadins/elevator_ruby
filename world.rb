@@ -2,8 +2,8 @@ require_relative 'building'
 require_relative 'human'
 
 class World
-  LIVE_TIME = 300;
-  HUMAN_PORTION_SIZE = 3;
+  LIVE_TIME = 100;
+  HUMAN_PORTION_SIZE = 2;
 
   def initialize
     @humans = Array.new
@@ -20,18 +20,19 @@ class World
       @building.update
     end
 
-    puts "MAIN #{@building.requests[0].from} #{@building.requests[0].to}".red
-    @building.requests[0].humans.each do |h|
-        puts "#{h.request_floor} #{h.current_floor} #{h.request}"
-    end
-    # req_hum = 0;
-    # r = @building.requests
-    # r.each do |req|
-    #     puts "from #{req.from} to #{req.to} humans = #{req.humans.size}"
-    #   req_hum += req.humans.size
+
+    # puts "MAIN #{@building.requests[0].from} #{@building.requests[0].to}".red
+    # @building.requests[0].humans.each do |h|
+    #     puts "#{h.request_floor} #{h.current_floor} #{h.request}"
     # end
-    #
-    # puts "#{@all_humans_count} #{req_hum}"
+    r = @building.requests
+    r.each do |req|
+      #puts req
+    end
+
+
+
+    puts @building.find_times
   end
 
   private

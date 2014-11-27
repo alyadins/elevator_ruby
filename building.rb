@@ -1,10 +1,11 @@
 require 'colorize'
 require_relative 'elevator'
 require_relative 'request'
+require 'benchmark'
 
 class Building
 
-  attr_accessor :requests
+  attr_accessor :requests, :find_times
   attr_reader :floors_count
 
   def initialize(floors, elevators_count, wait_time = 0, capacity)
@@ -12,6 +13,7 @@ class Building
     @humans = Array.new
     @requests = Array.new
     create_elevators(floors, elevators_count, wait_time, capacity)
+    @find_times = 0;
   end
 
   def add_new_humans(new_humans)
@@ -20,9 +22,9 @@ class Building
 
   def update
     update_requests
-    @elevators.each do |elevator|
-      elevator.update(@requests, @humans)
-    end
+     @elevators.each do |elevator|
+       elevator.update(@requests)
+     end
   end
 
   private
@@ -36,22 +38,22 @@ class Building
 
     def update_requests
       @humans.each do |human|
-        if human.request.nil?
+        unless human.request_accepted?
           request = Request.new(human.current_floor, human.request_floor)
 
-          if @requests.include?(request)
-            req = @requests.find {|r| r == request}
-            req.add_human(human)
-            human.request = req
-          else
-            request.add_human(human)
-            human.request = request
-            @requests << request
+          old_request = @requests.find do |r|
+            r == request
           end
+
+          if old_request.nil?
+            request.add_human(human)
+            @requests << request
+          else
+            old_request.add_human(human)
+          end
+          human.accept_request
+          requests.sort!
         end
       end
-
-      @requests.uniq
-      @requests.sort!
     end
 end

@@ -28,4 +28,9 @@ class Request
       0
     end
   end
+
+
+  def to_s
+    "from #{from} to #{to} humans #{humans.size}"
+  end
 end
